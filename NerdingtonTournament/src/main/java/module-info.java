@@ -5,4 +5,7 @@ module ralf.vanaert.nerdingtontournament {
 
     opens ralf.vanaert.nerdingtontournament to javafx.fxml;
     exports ralf.vanaert.nerdingtontournament;
+    exports ralf.vanaert.nerdingtontournament.Model;
+    exports ralf.vanaert.nerdingtontournament.Controller;
+    opens ralf.vanaert.nerdingtontournament.Controller to javafx.fxml;
 }

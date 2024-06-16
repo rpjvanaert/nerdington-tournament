@@ -27,6 +27,12 @@
         </dependency>
 
         <dependency>
+            <groupId>org.controlsfx</groupId>
+            <artifactId>controlsfx</artifactId>
+            <version>11.2.1</version>
+        </dependency>
+
+        <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
             <version>${junit.version}</version>
@@ -61,7 +67,7 @@
                         <id>default-cli</id>
                         <configuration>
                             <mainClass>
-                                ralf.vanaert.nerdingtontournament/ralf.vanaert.nerdingtontournament.HelloApplication
+                                ralf.vanaert.nerdingtontournament/ralf.vanaert.nerdingtontournament.TournamentApplication
                             </mainClass>
                             <launcher>app</launcher>
                             <jlinkZipName>app</jlinkZipName>
