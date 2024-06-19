@@ -4,7 +4,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox alignment="CENTER" cacheShape="false" spacing="20.0" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ralf.vanaert.nerdingtontournament.Controller.TournamentViewController" style="-fx-font-size: 125%;">
+<VBox prefWidth="1920" prefHeight="720" alignment="CENTER" cacheShape="false" spacing="20.0" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ralf.vanaert.nerdingtontournament.Controller.TournamentViewController" style="-fx-font-size: 150%;">
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
     </padding>
@@ -19,7 +19,10 @@
             <!-- Ensure HBox grows horizontally -->
             <children>
                 <Button fx:id="addPlayer" mnemonicParsing="false" text="Add Player" HBox.hgrow="ALWAYS"  />
+                <Button fx:id="removePlayer" mnemonicParsing="false" text="Remove Player" HBox.hgrow="ALWAYS"  />
                 <Button fx:id="addRound" mnemonicParsing="false" text="Add Round" HBox.hgrow="ALWAYS" />
+                <Button fx:id="removeRound" mnemonicParsing="false" text="Remove Round" HBox.hgrow="ALWAYS"  />
+                <Button fx:id="editGames" mnemonicParsing="false" text="Edit Games" HBox.hgrow="ALWAYS"  />
             </children>
         </HBox>
     </children>
