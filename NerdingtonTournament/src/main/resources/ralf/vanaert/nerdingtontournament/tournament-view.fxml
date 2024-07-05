@@ -23,6 +23,7 @@
                 <Button fx:id="addRound" mnemonicParsing="false" text="Add Round" HBox.hgrow="ALWAYS" />
                 <Button fx:id="removeRound" mnemonicParsing="false" text="Remove Round" HBox.hgrow="ALWAYS"  />
                 <Button fx:id="editGames" mnemonicParsing="false" text="Edit Games" HBox.hgrow="ALWAYS"  />
+                <Button fx:id="showStandings" mnemonicParsing="false" text="Show standings" HBox.hgrow="ALWAYS"  />
             </children>
         </HBox>
     </children>

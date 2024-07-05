@@ -42,6 +42,8 @@ public class TournamentViewController implements Initializable {
     private Button removeRound;
     @FXML
     private Button editGames;
+    @FXML
+    private Button showStandings;
 
     private ObservableList<Player> players;
     private ObservableList<Game> games;
@@ -85,6 +87,7 @@ public class TournamentViewController implements Initializable {
         addRound.setOnAction(event -> addRound());
         removeRound.setOnAction(event -> removeRound());
         editGames.setOnAction(event -> editGames());
+        showStandings.setOnAction(event -> showStandings());
     }
 
     private void addRound() {
@@ -127,12 +130,28 @@ public class TournamentViewController implements Initializable {
         }
     }
 
+    private void showStandings() {
+        FXMLLoader fxmlLoader = new FXMLLoader(TournamentApplication.class.getResource("result-view.fxml"));
+        try {
+            Scene scene = new Scene(fxmlLoader.load());
+            ResultViewController controller = fxmlLoader.getController();
+            controller.setPlayers(this.players);
+            Stage stage = new Stage();
+            stage.setTitle("Standings");
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     private void showMatchmaking() {
         FXMLLoader fxmlLoader = new FXMLLoader(TournamentApplication.class.getResource("matchmaking-view.fxml"));
         try {
             Scene scene = new Scene(fxmlLoader.load());
             MatchmakingViewController controller = fxmlLoader.getController();
-            controller.initMatchmaking(players, games);
+            boolean randomRound = (this.roundCount % 3) == 0;
+            controller.initMatchmaking(players, games, randomRound);
             Stage stage = new Stage();
             stage.setTitle("Nerdington Tournament");
             stage.setScene(scene);

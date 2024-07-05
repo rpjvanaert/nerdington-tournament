@@ -6,9 +6,8 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
-import javafx.scene.control.Control;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import ralf.vanaert.nerdingtontournament.Model.AssignedGame;
@@ -26,57 +25,83 @@ public class MatchmakingViewController implements Initializable {
     @FXML
     private VBox pairings;
 
+    @FXML
+    private Button reroll;
+
     private ObservableList<AssignedGame> assignedGames;
 
-    public void initMatchmaking(ObservableList<Player> players, ObservableList<Game> games) {
-        FXCollections.sort(players, Comparator.comparingInt(Player::getScore).reversed());
-        List<Player> unassignedPlayers = new ArrayList<>(players);
-        List<Game> matchmakingGames = new ArrayList<>(games);
-        while (!unassignedPlayers.isEmpty()) {
-            this.assignedGames.add(pickRandom(matchmakingGames, unassignedPlayers));
+    private List<Player> players;
+    private List<Game> games;
+    private boolean playersRandom;
+
+    public void initMatchmaking(ObservableList<Player> players, ObservableList<Game> games, boolean random) {
+        setData(players, games, random);
+
+        for (int attempt = 1; attempt <= 10; attempt++) {
+            if (rollMatchmaking()) break;
         }
     }
 
-    private AssignedGame pickRandom(List<Game> games, List<Player> unassignedPlayers) {
-        AssignedGame game = null;
-
-        List<Integer> possibleSizes = determinePossibleSizes(unassignedPlayers);
-
-        if (possibleSizes.isEmpty()) {
-            // Handle the case where no valid sizes are available
-            // You can throw an exception, log an error, or handle it based on your application logic
-            throw new IllegalArgumentException("No valid sizes available for matchmaking.");
-        }
+    private boolean rollMatchmaking() {
+        List<Player> unassignedPlayers = new ArrayList<>(this.players);
+        List<Game> unassignedGames = new ArrayList<>(this.games);
 
         Random random = new Random();
-        int randomIndex = random.nextInt(possibleSizes.size());
-        int amountPlayers = possibleSizes.get(randomIndex);
+        Collections.shuffle(unassignedGames, random);
+        if (this.playersRandom) Collections.shuffle(unassignedPlayers, random);
 
-        List<Player> assignedPlayers = new ArrayList<>();
-        for (int i = 0; i < amountPlayers; i++) {
-            assignedPlayers.add(unassignedPlayers.remove(0));
-        }
+        this.assignedGames.clear();
 
-        List<Game> possibleGames = new ArrayList<>();
-        for (Game eachGame : games) {
-            if (amountPlayers >= eachGame.getMinPlayers() && amountPlayers <= eachGame.getMaxPlayers()) {
-                possibleGames.add(eachGame);
+        while (!unassignedPlayers.isEmpty()) {
+            if (unassignedPlayers.size() == 1) return false;
+
+            AssignedGame game = null;
+
+            List<Integer> possibleSizes = determinePossibleSizes(unassignedPlayers);
+
+            if (possibleSizes.isEmpty()) {
+                return false;
             }
+
+            int randomIndex = random.nextInt(possibleSizes.size());
+            int amountPlayers = possibleSizes.get(randomIndex);
+
+            List<Player> assignedPlayers = new ArrayList<>();
+            for (int i = 0; i < amountPlayers; i++) {
+                assignedPlayers.add(unassignedPlayers.remove(0));
+            }
+
+            List<Game> possibleGames = new ArrayList<>();
+            for (Game eachGame : unassignedGames) {
+                if (amountPlayers >= eachGame.getMinPlayers() && amountPlayers <= eachGame.getMaxPlayers()) {
+                    possibleGames.add(eachGame);
+                }
+            }
+
+            if (possibleGames.isEmpty()) {
+                return false;
+            }
+
+            randomIndex = random.nextInt(possibleGames.size());
+            game = new AssignedGame(possibleGames.get(randomIndex), assignedPlayers);
+            unassignedGames.remove(possibleGames.get(randomIndex));
+
+            this.assignedGames.add(game);
         }
 
-        if (possibleGames.isEmpty()) {
-            // Handle the case where no valid games are available for the selected size
-            // You can throw an exception, log an error, or handle it based on your application logic
-            throw new IllegalArgumentException("No valid games available for matchmaking with " + amountPlayers + " players.");
-        }
-
-        randomIndex = random.nextInt(possibleGames.size());
-        game = new AssignedGame(possibleGames.get(randomIndex), assignedPlayers);
-        games.remove(possibleGames.get(randomIndex));
-
-        return game;
+        return true;
     }
 
+    private Game pickGame(int numberPlayers) {
+        return null;
+    }
+
+    private void setData(ObservableList<Player> players, ObservableList<Game> games, boolean random) {
+        this.players = new ArrayList<>(players);
+        this.games = new ArrayList<>(games);
+        this.playersRandom = random;
+        this.players.sort(Comparator.comparingInt(Player::getScore).reversed());
+    }
 
     private static List<Integer> determinePossibleSizes(List<Player> unassignedPlayers) {
         List<Integer> possibleSizes = new ArrayList<>();
@@ -96,6 +121,10 @@ public class MatchmakingViewController implements Initializable {
                 pairings.getChildren().add(getMatchmakingCard(assignedGame));
             }
         });
+
+        this.reroll.setOnAction(event -> {
+            rollMatchmaking();
+        });
     }
 
     private static Pane getMatchmakingCard(AssignedGame assignedGame) {
@@ -111,13 +140,11 @@ public class MatchmakingViewController implements Initializable {
 
     private static List<Label> getPlayerLabels(List<Player> players) {
         List<Label> labels = new ArrayList<>();
-
         players.forEach(player -> {
             Label label = new Label("- " + player.getName());
             label.setFont(FONT_TEXT);
             labels.add(label);
         });
-
         return labels;
     }
 }

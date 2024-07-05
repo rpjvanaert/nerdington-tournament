@@ -46,6 +46,10 @@ public class Player {
         return results.get(index).get();
     }
 
+    public int getResultSize() {
+        return results.size();
+    }
+
     public void setResult(int index, Integer result) {
         ensureResultsSize(index + 1);
         results.get(index).set(result);
