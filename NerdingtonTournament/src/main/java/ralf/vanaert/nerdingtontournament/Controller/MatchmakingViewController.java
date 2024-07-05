@@ -58,33 +58,46 @@ public class MatchmakingViewController implements Initializable {
             AssignedGame game = null;
 
             List<Integer> possibleSizes = determinePossibleSizes(unassignedPlayers);
+            Collections.sort(possibleSizes);
 
             if (possibleSizes.isEmpty()) {
                 return false;
             }
 
-            int randomIndex = random.nextInt(possibleSizes.size());
-            int amountPlayers = possibleSizes.get(randomIndex);
+            Game chosenGame = null;
+            Game contender;
+            int tooLongCount = 0;
+            while (chosenGame == null) {
+                contender = unassignedGames.get(random.nextInt(unassignedGames.size()));
+
+                if (contender.getMinPlayers() <= possibleSizes.get(0)){
+                    chosenGame = contender;
+                    unassignedGames.remove(contender);
+                } else {
+                    tooLongCount++;
+
+                    if (tooLongCount >= 10) {
+                        return false;
+                    }
+                }
+            }
+
+            Iterator<Integer> iterator = possibleSizes.iterator();
+            while (iterator.hasNext()) {
+                int possibleSize = iterator.next();
+                if (possibleSize < chosenGame.getMinPlayers() || possibleSize > chosenGame.getMaxPlayers()) {
+                    iterator.remove();
+                }
+            }
+
+            int amountPlayers = possibleSizes.get(random.nextInt(possibleSizes.size()));
 
             List<Player> assignedPlayers = new ArrayList<>();
             for (int i = 0; i < amountPlayers; i++) {
                 assignedPlayers.add(unassignedPlayers.remove(0));
             }
 
-            List<Game> possibleGames = new ArrayList<>();
-            for (Game eachGame : unassignedGames) {
-                if (amountPlayers >= eachGame.getMinPlayers() && amountPlayers <= eachGame.getMaxPlayers()) {
-                    possibleGames.add(eachGame);
-                }
-            }
-
-            if (possibleGames.isEmpty()) {
-                return false;
-            }
-
-            randomIndex = random.nextInt(possibleGames.size());
-            game = new AssignedGame(possibleGames.get(randomIndex), assignedPlayers);
-            unassignedGames.remove(possibleGames.get(randomIndex));
+            game = new AssignedGame(chosenGame, assignedPlayers);
 
             this.assignedGames.add(game);
         }

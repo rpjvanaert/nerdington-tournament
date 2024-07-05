@@ -50,17 +50,21 @@ public class TournamentViewController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        players = FXCollections.observableArrayList();
+        players = FXCollections.observableArrayList(
+                new Player("Gitte"),
+                new Player("Judith"),
+                new Player("Remco"),
+                new Player("Timo"),
+                new Player("Anna"),
+                new Player("Lars"),
+                new Player("Ralf")
+        );
 
-        int amountPlayers = 15;
-        for (int i = 1; i <= amountPlayers; i++) {
-            players.add(new Player("Player " + i));
-        }
 
         games = FXCollections.observableArrayList(
                 new Game("Skip-bo", 3, 6),
                 new Game("Uno", 3, 6),
-                new Game("Qwixx", 4, 6),
+                new Game("Qwixx", 3, 6),
                 new Game("Nope!", 3, 6),
                 new Game("Hali Galli", 2, 6),
                 new Game("Exploding Kittens", 3, 5),
@@ -70,7 +74,9 @@ public class TournamentViewController implements Initializable {
                 new Game("Klik!", 2, 4),
                 new Game("Set", 3,6),
                 new Game("Mens erger je niet!", 3,4),
-                new Game("Lego Minotarus", 3, 4)
+                new Game("Lego Minotarus", 3, 4),
+                new Game("Spicy", 2, 4),
+                new Game("Stef Stuntpiloot", 2, 4)
         );
 
         name.setCellValueFactory(new PropertyValueFactory<>("name"));
@@ -78,9 +84,11 @@ public class TournamentViewController implements Initializable {
         name.setOnEditCommit(event -> event.getRowValue().setName(event.getNewValue()));
 
         score.setCellValueFactory(cellData -> cellData.getValue().getScoreProperty());
+        score.setComparator((score1, score2) -> score2.intValue() - score1.intValue());
 
         table.setItems(players);
         table.setEditable(true);
+        table.getSortOrder().add(score);
 
         addPlayer.setOnAction(event -> addPlayer());
         removePlayer.setOnAction(event -> removePlayer());
@@ -178,6 +186,7 @@ public class TournamentViewController implements Initializable {
         }));
         resultColumn.setOnEditCommit(event -> {
             event.getRowValue().setResult(index, event.getNewValue());
+            table.sort();
         });
         table.getColumns().add(resultColumn);
     }
