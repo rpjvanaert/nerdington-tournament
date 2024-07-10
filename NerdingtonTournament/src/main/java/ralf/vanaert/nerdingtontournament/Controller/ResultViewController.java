@@ -20,7 +20,7 @@ public class ResultViewController implements Initializable {
     @FXML
     private ListView<String> listView;
     @FXML
-    private LineChart chart;
+    private LineChart<Number, Number> chart;
 
     public void setPlayers(List<Player> players) {
         players.sort(Comparator.comparingInt(Player::getScore).reversed());
@@ -31,7 +31,7 @@ public class ResultViewController implements Initializable {
         }
 
         chart.getData().clear();
-        XYChart.Series<String, Number> series;
+        XYChart.Series<Number, Number> series;
         for (Player player : players) {
             series = new XYChart.Series<>();
             series.setName(player.getName());
@@ -42,7 +42,7 @@ public class ResultViewController implements Initializable {
                     scoreAtRound += player.getResult(countingAt);
                 }
 
-                series.getData().add(new XYChart.Data<>(Integer.toString(round + 1), scoreAtRound));
+                series.getData().add(new XYChart.Data<>(round + 1, scoreAtRound));
             }
             chart.getData().add(series);
         }
