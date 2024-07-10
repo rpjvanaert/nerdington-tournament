@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.scene.chart.BarChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.chart.LineChart?>
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="ralf.vanaert.nerdingtontournament.Controller.ResultViewController"
+            prefHeight="480.0" prefWidth="640.0">
+
+    <HBox>
+        <ListView fx:id="listView" />
+        <LineChart fx:id="chart">
+            <xAxis>
+                <NumberAxis label="Round"/>
+            </xAxis>
+            <yAxis>
+                <NumberAxis label="Score"/>
+            </yAxis>
+        </LineChart>
+    </HBox>
+
+
+</AnchorPane>

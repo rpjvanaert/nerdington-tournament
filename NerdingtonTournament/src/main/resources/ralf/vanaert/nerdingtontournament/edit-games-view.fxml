@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.collections.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox alignment="CENTER" spacing="10.0" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ralf.vanaert.nerdingtontournament.Controller.EditGamesController">
+    <padding>
+        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+    </padding>
+    <children>
+        <Label text="Edit Games List"/>
+        <TableView fx:id="gameTable" VBox.vgrow="ALWAYS">
+            <columns>
+                <TableColumn fx:id="gameName" text="Game Name"/>
+                <TableColumn fx:id="minPlayers" text="Min Players"/>
+                <TableColumn fx:id="maxPlayers" text="Max Players"/>
+            </columns>
+        </TableView>
+        <HBox spacing="10.0">
+            <Button fx:id="addGame" text="Add Game"/>
+            <Button fx:id="removeGame" text="Remove Game"/>
+            <Button fx:id="saveGames" text="Save"/>
+        </HBox>
+    </children>
+</VBox>

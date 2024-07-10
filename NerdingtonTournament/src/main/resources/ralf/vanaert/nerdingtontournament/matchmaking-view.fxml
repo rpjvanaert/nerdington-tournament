@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="ralf.vanaert.nerdingtontournament.Controller.MatchmakingViewController"
+      prefHeight="960.0" prefWidth="400.0">
+
+    <ScrollPane VBox.vgrow="ALWAYS">
+        <content>
+            <VBox spacing="10">
+                <Button fx:id="reroll" mnemonicParsing="false" text="Reroll" HBox.hgrow="ALWAYS" />
+                <VBox fx:id="pairings" spacing="10">
+                    <padding>
+                        <Insets top="10" right="10" bottom="10" left="10"/>
+                    </padding>
+                </VBox>
+            </VBox>
+        </content>
+    </ScrollPane>
+
+</VBox>
